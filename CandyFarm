@@ -1,0 +1,62 @@
+
+-- CandyFarm UI
+-- Interface tactile pour Roblox
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "CandyFarm"
+gui.ResetOnSpawn = false
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 230, 0, 220)
+frame.Position = UDim2.new(0.5, -115, 0.5, -110)
+frame.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+frame.Parent = gui
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 40)
+title.BackgroundTransparency = 1
+title.Text = "🍬 Candy Farm"
+title.TextColor3 = Color3.new(1, 1, 1)
+title.TextScaled = true
+title.Parent = frame
+
+local function makeButton(text, y, callback)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0.9, 0, 0, 40)
+    button.Position = UDim2.new(0.05, 0, 0, y)
+    button.Text = text
+    button.TextScaled = true
+    button.Parent = frame
+    button.Activated:Connect(callback)
+    return button
+end
+
+local flying = false
+local farming = false
+
+local flyButton = makeButton("Fly : OFF", 50, function()
+    flying = not flying
+    flyButton.Text = flying and "Fly : ON" or "Fly : OFF"
+end)
+
+local farmButton = makeButton("Auto Farm : OFF", 100, function()
+    farming = not farming
+    farmButton.Text = farming
+        and "Auto Farm : ON"
+        or "Auto Farm : OFF"
+end)
+
+makeButton("Reset personnage", 150, function()
+    local character = player.Character
+    local humanoid = character
+        and character:FindFirstChildOfClass("Humanoid")
+
+    if humanoid then
+        humanoid.Health = 0
+    end
+end)
+
+gui.Parent = player:WaitForChild("PlayerGui")
